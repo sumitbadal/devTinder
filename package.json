@@ -13,6 +13,7 @@
   "author": "Sumit",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "mongoose": "^8.7.0"
   }
 }
