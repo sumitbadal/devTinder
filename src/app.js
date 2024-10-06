@@ -1,16 +1,54 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const connectDB = require("./config/database");
 const app = express();
+const User = require("./models/user");
+const cookieParser = require("cookie-parser");
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
 
-const mongoDBURI = "mongodb+srv://sumit:9534149147@cluster0.zucyuib.mongodb.net/";
-mongoose.connect(mongoDBURI)
-  .then(() => console.log('Connected!'))
-  .catch((err) => console.error('Connection error:', err));
+app.use(express.json());
+app.use(cookieParser());
 
+app.use("/auth", authRouter);
+app.use("/profile", profileRouter);
+app.use("/request", requestRouter);
+
+app.patch("/userUpdate/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const data = req.body;
+
+    try{
+      const ALLOWED_UPDATES =[
+        "about", "lastName", "gender", "skills"
+      ];
+  
+      const isUpdateAllowed = Object.keys(data).every((k) => {
+        ALLOWED_UPDATES.includes(k);
+      });
+
+      if(!isUpdateAllowed) throw new Error("Updates not allowed");
+        const user = await User.findByIdAndUpdate({_id: userId}, data, {
+          returnDocument: "after",
+          runValidators: true
+      });
+      console.log(user);
+      res.send(`User updated successfully: ${user}`);
+    } catch(error){
+      res.status(400).send(`update Failed: ${error.message}`);
+    }
+});
+
+connectDB().then( () => {
+  console.log("DB connected successfully");
+  app.listen(3000, () => {
+      console.log(`Server running on 3000 port`);
+  });
+})
+.catch((error) => {
+  console.log(error);
+});
 
 app.get("/test", (req, res)=> {
     res.send("Hi this is test");
 })
-app.listen(3000, () => {
-    console.log(`Server running on 3000 port`);
-});
