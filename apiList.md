@@ -9,8 +9,8 @@ PATCH /profile/edit
 PATCH /profile/password
 
 ==connectionRequestRouter==
-POST /request/send/interested/:userId
-POST /request/send/ignored/:userId
+[ POST /request/send/interested/:userId, POST /request/send/ignored/:userId ] => POST /request/send/:status/:userId
+
 POST /request/review/accepted/:requested
 POST /request/review/rejected/:requested
 

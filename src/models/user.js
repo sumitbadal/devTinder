@@ -43,6 +43,13 @@ const userSchema = new mongoose.Schema(
                 }
             }
         },
+        photoUrl: {
+            type: String,
+            default: "https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg",
+            validate(value) {
+                if(!validator.isURL(value)) throw new Error(`Invalid photo url: ${value}`);
+            },
+        },
         about: {
             type: String,
             default: "This is default about user"
@@ -55,6 +62,8 @@ const userSchema = new mongoose.Schema(
         timestamps: true
     }
 );
+
+userSchema.index({ firstName: 1, lastName: 1 });
 
 userSchema.methods.getToken = async function() {
     const user = this;
