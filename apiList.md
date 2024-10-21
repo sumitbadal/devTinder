@@ -15,7 +15,7 @@ POST /request/review/accepted/:requested
 POST /request/review/rejected/:requested
 
 ==userRouter==
-GET /user/connections
+GET /user/connections/:status
 GET /user/requests
 GET /user/feed
 
