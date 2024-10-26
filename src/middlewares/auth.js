@@ -4,7 +4,9 @@ const User = require("../models/user");
 const userAuth = async (req, res, next) => {
     try{
         const {token} = req.cookies;
-        if(!token) throw new Error("Invalid Token");
+        if(!token) {
+            return res.status(401).send(`Invalid Credentials`);
+        }
 
         const decodeObj = await jwt.verify(token, "DEV@sumit");
         const { _id } = decodeObj;
