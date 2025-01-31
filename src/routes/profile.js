@@ -6,8 +6,8 @@ const profileRouter = express.Router();
 profileRouter.get("/view", userAuth, async (req, res) => {
     try{
         const user = req.user;
-        console.log(`Logged in user: ${user}`);
-        res.send(`Reading Cookies, ${user}`);
+        // console.log(`Logged in user: ${user}`);
+        res.send(user);
     }catch(error){
         res.send(`Error: ${error.message}`);
     }

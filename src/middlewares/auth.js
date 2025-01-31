@@ -12,7 +12,7 @@ const userAuth = async (req, res, next) => {
         const { _id } = decodeObj;
         const user = await User.findById(_id);
         if(!user) throw new Error("User not found");
-        console.log(`Logged in user: ${user} ${_id}`, req.cookies);
+        // console.log(`Logged in user: ${user} ${_id}`, req.cookies);
         req['user'] = user;
         next();
     } catch(error) {

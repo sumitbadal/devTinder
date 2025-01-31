@@ -7,6 +7,10 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const cors = require("cors");
+const userRouter = require("./routes/user");
+const http = require("http");
+const { initializeSocket } = require("./utills/socket");
+const chatRouter = require("./routes/chat");
 
 app.use(cors({
   origin: "http://localhost:5173",
@@ -18,6 +22,11 @@ app.use(cookieParser());
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/request", requestRouter);
+app.use("/user", userRouter);
+app.use("/chat", chatRouter);
+
+const server = http.createServer(app);
+initializeSocket(server);
 
 app.patch("/userUpdate/:userId", async (req, res) => {
     const userId = req.params.userId;
@@ -46,7 +55,7 @@ app.patch("/userUpdate/:userId", async (req, res) => {
 
 connectDB().then( () => {
   console.log("DB connected successfully");
-  app.listen(3000, () => {
+  server.listen(3000, () => {
       console.log(`Server running on 3000 port`);
   });
 })
